@@ -282,6 +282,20 @@ export default function SubmitPage() {
             </div>
           )}
 
+          {/* reCAPTCHA Notice */}
+          <div className="border-4 border-gray-600 p-4 bg-gray-800">
+            <div className="flex items-center gap-3">
+              <div className="text-yellow-400 text-2xl">🛡️</div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-yellow-400">BOT PROTECTION ACTIVE</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  This form is protected by Google reCAPTCHA v3 to prevent spam.
+                  Your submission will be verified automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Submit Button */}
           <button
             type="submit"
