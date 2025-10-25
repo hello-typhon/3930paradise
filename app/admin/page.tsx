@@ -147,20 +147,27 @@ export default function AdminPage() {
     <div className="min-h-screen bg-black text-white font-mono">
       {/* Header */}
       <header className="border-b-4 border-red-500 p-4 bg-black">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-bold">3930 PARADISE</h1>
-            <p className="text-xl text-red-500 font-bold">ADMIN PORTAL</p>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex justify-between items-center mb-2">
+            <div>
+              <h1 className="text-4xl font-bold">3930 PARADISE</h1>
+              <p className="text-xl text-red-500 font-bold">ADMIN PORTAL</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-400">Logged in as: {session?.username}</p>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-yellow-400 hover:text-yellow-300 underline mt-1"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-400">Logged in as: {session?.username}</p>
-            <button
-              onClick={handleLogout}
-              className="text-sm text-yellow-400 hover:text-yellow-300 underline mt-1"
-            >
-              Logout
-            </button>
-          </div>
+          <p className="text-xs text-gray-500 italic">
+            Moderate submissions. Verify claims. Keep residents accountable and honest.
+            <br />
+            Unlike "resort-style" management, we actually review feedback.
+          </p>
         </div>
       </header>
 

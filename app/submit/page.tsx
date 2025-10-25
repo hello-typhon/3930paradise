@@ -86,6 +86,9 @@ export default function SubmitPage() {
           <p className="text-xl md:text-2xl text-red-500 mt-2 font-bold">
             SUBMIT EVENT
           </p>
+          <p className="text-sm text-gray-400 mt-2">
+            Document your "resort-style community" experience. Your submission will be reviewed by an admin.
+          </p>
         </div>
       </header>
 
@@ -102,12 +105,21 @@ export default function SubmitPage() {
       <main className="max-w-4xl mx-auto p-4 md:p-8">
         <div className="mb-8 border-4 border-white p-4 bg-red-900">
           <h2 className="text-xl font-bold mb-2">DOCUMENTATION GUIDELINES</h2>
+          <p className="text-xs text-yellow-400 mb-3 italic">
+            Unlike Elysian Living's "mindfully developed" marketing materials, we ask for facts and evidence.
+          </p>
           <ul className="text-sm space-y-1 list-disc list-inside">
-            <li>Be factual and specific with dates</li>
+            <li>Be factual and specific with dates and times</li>
             <li>Upload screenshots, emails, or documents as evidence</li>
             <li>Remove or blur personal information before uploading</li>
             <li>Include relevant details but avoid defamation</li>
+            <li>Describe what happened vs. what was promised</li>
+            <li>Note any maintenance requests, communication delays, or fee issues</li>
           </ul>
+          <p className="text-xs text-gray-400 mt-3 border-t border-gray-600 pt-3">
+            All submissions are reviewed before posting. We verify claims when possible.
+            This is accountability, not a review site.
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -121,7 +133,7 @@ export default function SubmitPage() {
               type="text"
               required
               className="w-full bg-black border-2 border-gray-600 p-3 text-white font-mono focus:border-yellow-400 outline-none"
-              placeholder="e.g., Water leak in unit - no response for 3 days"
+              placeholder="e.g., AC broken for 5 days despite 'health and wellness' promises"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
@@ -284,8 +296,14 @@ export default function SubmitPage() {
       {/* Footer */}
       <footer className="border-t-4 border-red-500 mt-16 p-8 bg-black">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-gray-400 text-sm">
-            All submissions are public. Do not include personal information.
+          <p className="text-gray-400 text-sm mb-2">
+            All approved submissions become public. Do not include personal information.
+          </p>
+          <p className="text-gray-600 text-xs">
+            Your event will be reviewed before appearing on the timeline.
+          </p>
+          <p className="text-gray-700 text-xs mt-3">
+            Protected by reCAPTCHA. Because unlike "socially conscious living," we actually prevent spam.
           </p>
         </div>
       </footer>
