@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { BackgroundVideo } from '@/components/background-video';
 
 type Attachment = {
   id: string;
@@ -41,8 +42,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white font-mono">
+      {/* Background Videos */}
+      <BackgroundVideo />
+
       {/* Header - Brutalist style */}
-      <header className="border-b-4 border-red-500 p-4 bg-black">
+      <header className="border-b-4 border-red-500 p-4 bg-black relative z-10">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
             3930 PARADISE
@@ -62,7 +66,7 @@ export default function Home() {
       </header>
 
       {/* Navigation */}
-      <nav className="bg-yellow-400 text-black p-2 border-b-4 border-white">
+      <nav className="bg-yellow-400 text-black p-2 border-b-4 border-white relative z-10">
         <div className="max-w-6xl mx-auto flex gap-4 font-bold">
           <Link href="/" className="hover:underline">
             TIMELINE
@@ -74,7 +78,7 @@ export default function Home() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto p-4 md:p-8">
+      <main className="max-w-6xl mx-auto p-4 md:p-8 relative z-10">
         <div className="mb-8 border-4 border-white p-4 bg-red-900">
           <h2 className="text-2xl font-bold mb-2">RESIDENT INCIDENT TIMELINE</h2>
           <p className="text-sm mb-3">
@@ -178,7 +182,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t-4 border-red-500 mt-16 p-8 bg-black">
+      <footer className="border-t-4 border-red-500 mt-16 p-8 bg-black relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 mb-6">
             <div className="border-2 border-gray-700 p-4">

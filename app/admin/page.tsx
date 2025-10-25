@@ -180,6 +180,9 @@ export default function AdminPage() {
           <Link href="/submit" className="hover:underline">
             SUBMIT EVENT
           </Link>
+          <Link href="/admin/videos" className="hover:underline">
+            BACKGROUND VIDEOS
+          </Link>
         </div>
       </nav>
 

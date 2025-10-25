@@ -43,3 +43,15 @@ model Attachment {
   redactionAreas  String?  // JSON string of areas to blur
   createdAt       DateTime @default(now())
 }
+
+model BackgroundVideo {
+  id          String   @id @default(cuid())
+  title       String
+  videoUrl    String
+  isActive    Boolean  @default(true)
+  opacity     Float    @default(0.15) // 0.0 - 1.0
+  description String?  // What the video shows
+  order       Int      @default(0)    // Display order
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
