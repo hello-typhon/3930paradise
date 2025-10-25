@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  eventDate   DateTime
+  category    String       // e.g., "maintenance", "complaint", "violation", "notice"
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attachments Attachment[]
+}
+
+model Attachment {
+  id              String   @id @default(cuid())
+  eventId         String
+  event           Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  fileName        String
+  fileUrl         String
+  fileType        String   // "image" or "document"
+  isPiiRedacted   Boolean  @default(false)
+  redactionAreas  String?  // JSON string of areas to blur
+  createdAt       DateTime @default(now())
+}
