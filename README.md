@@ -6,20 +6,26 @@ An interactive web application for residents to document and share events at 393
 
 ## Features
 
-- **Visual Timeline**: Chronological display of resident-submitted events
-- **Event Submission**: Easy form to submit incidents with screenshots and documents
+- **Visual Timeline**: Chronological display of approved resident-submitted events
+- **Secure Submission Portal**: CAPTCHA-protected form to prevent spam and bots
+- **Admin Moderation**: Review and approve/reject submissions before they go public
 - **File Upload**: Support for images and PDFs using UploadThing
 - **PII Protection**: Reminders to redact personal information before uploading
+- **Admin Authentication**: Secure login system with iron-session
+- **Event Approval Workflow**: All submissions require admin approval before appearing publicly
 - **Brutalist Design**: A stark contrast to polished corporate property management websites
 
 ## Tech Stack
 
-- **Next.js 14** - React framework with App Router
+- **Next.js 16** - React framework with App Router
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Utility-first styling
 - **Prisma** - Database ORM
 - **SQLite** - Local database (can be swapped for PostgreSQL in production)
 - **UploadThing** - File upload service
+- **Google reCAPTCHA v3** - Bot protection
+- **iron-session** - Secure session management
+- **bcryptjs** - Password hashing
 - **Vercel** - Deployment platform
 
 ## Getting Started
@@ -52,9 +58,15 @@ Edit `.env.local` and add:
 ```
 DATABASE_URL="file:./dev.db"
 UPLOADTHING_TOKEN="your_uploadthing_token_here"
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY="your_recaptcha_site_key"
+RECAPTCHA_SECRET_KEY="your_recaptcha_secret_key"
+SESSION_SECRET="your_32_char_secret_here"
 ```
 
-Get your UploadThing token from: https://uploadthing.com
+**Get your API keys:**
+- UploadThing token: https://uploadthing.com
+- reCAPTCHA keys: https://www.google.com/recaptcha/admin (use v3)
+- Session secret: Generate with `openssl rand -base64 32`
 
 4. Generate Prisma client and create database:
 ```bash
@@ -62,12 +74,31 @@ DATABASE_URL="file:./dev.db" npx prisma generate
 DATABASE_URL="file:./dev.db" npx prisma db push
 ```
 
-5. Run the development server:
+5. Create an admin user:
+```bash
+npm run create-admin
+```
+
+Follow the prompts to set up your admin username and password.
+
+6. Run the development server:
 ```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Admin Portal
+
+Access the admin portal at `/admin/login` to:
+- Review pending event submissions
+- Approve or reject events
+- Delete approved events if needed
+- View submitter contact information (if provided)
+
+**Default URL**: http://localhost:3000/admin/login
+
+Use the credentials you created with `npm run create-admin`.
 
 ## Database Schema
 
@@ -77,9 +108,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - `description`: Detailed description
 - `eventDate`: Date when the event occurred
 - `category`: Type of event (maintenance, complaint, violation, notice, fee, other)
+- `isApproved`: Whether admin has approved the event (default: false)
+- `approvedAt`: Timestamp of approval
+- `approvedBy`: Admin username who approved it
+- `submitterEmail`: Optional contact email (not publicly displayed)
 - `createdAt`: Submission timestamp
 - `updatedAt`: Last update timestamp
 - `attachments`: Related files
+
+### Admin
+- `id`: Unique identifier
+- `username`: Admin login username
+- `passwordHash`: Bcrypt hashed password
+- `createdAt`: Account creation timestamp
 
 ### Attachment
 - `id`: Unique identifier

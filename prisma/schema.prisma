@@ -11,14 +11,25 @@ datasource db {
 }
 
 model Event {
-  id          String       @id @default(cuid())
-  title       String
-  description String
-  eventDate   DateTime
-  category    String       // e.g., "maintenance", "complaint", "violation", "notice"
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  attachments Attachment[]
+  id              String       @id @default(cuid())
+  title           String
+  description     String
+  eventDate       DateTime
+  category        String       // e.g., "maintenance", "complaint", "violation", "notice"
+  isApproved      Boolean      @default(false)
+  approvedAt      DateTime?
+  approvedBy      String?
+  submitterEmail  String?      // Optional contact for follow-up
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  attachments     Attachment[]
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
 }
 
 model Attachment {

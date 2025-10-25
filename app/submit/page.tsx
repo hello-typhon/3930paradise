@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { UploadButton } from '@/lib/uploadthing';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 type UploadedFile = {
   url: string;
@@ -13,27 +14,39 @@ type UploadedFile = {
 
 export default function SubmitPage() {
   const router = useRouter();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     eventDate: '',
     category: 'complaint',
+    submitterEmail: '',
   });
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
+    setSuccess(false);
 
     try {
+      // Get CAPTCHA token
+      if (!executeRecaptcha) {
+        throw new Error('reCAPTCHA not ready');
+      }
+
+      const captchaToken = await executeRecaptcha('submit_event');
+
       const response = await fetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          captchaToken,
           attachments: uploadedFiles.map((file) => ({
             fileName: file.name,
             fileUrl: file.url,
@@ -43,11 +56,19 @@ export default function SubmitPage() {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to submit event');
+      const data = await response.json();
 
-      router.push('/');
-    } catch (err) {
-      setError('Failed to submit event. Please try again.');
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit event');
+      }
+
+      setSuccess(true);
+      // Reset form after 3 seconds and redirect
+      setTimeout(() => {
+        router.push('/');
+      }, 3000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to submit event. Please try again.');
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -158,6 +179,24 @@ export default function SubmitPage() {
             />
           </div>
 
+          {/* Email */}
+          <div className="border-4 border-white p-4 bg-gray-900">
+            <label className="block text-yellow-400 font-bold mb-2" htmlFor="submitterEmail">
+              YOUR EMAIL (Optional)
+            </label>
+            <input
+              id="submitterEmail"
+              type="email"
+              className="w-full bg-black border-2 border-gray-600 p-3 text-white font-mono focus:border-yellow-400 outline-none"
+              placeholder="For follow-up or questions (not publicly displayed)"
+              value={formData.submitterEmail}
+              onChange={(e) => setFormData({ ...formData, submitterEmail: e.target.value })}
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              Optional. Only visible to admins, never displayed publicly.
+            </p>
+          </div>
+
           {/* File Upload */}
           <div className="border-4 border-white p-4 bg-gray-900">
             <label className="block text-yellow-400 font-bold mb-2">
@@ -210,6 +249,19 @@ export default function SubmitPage() {
               </div>
             )}
           </div>
+
+          {/* Success Message */}
+          {success && (
+            <div className="border-4 border-green-500 p-4 bg-green-900">
+              <p className="font-bold text-green-200">
+                ✓ EVENT SUBMITTED SUCCESSFULLY!
+              </p>
+              <p className="text-sm mt-2 text-green-300">
+                Your submission will be reviewed by an admin and appear on the timeline after approval.
+                Redirecting to homepage...
+              </p>
+            </div>
+          )}
 
           {/* Error Message */}
           {error && (
