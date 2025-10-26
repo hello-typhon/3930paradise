@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { BackgroundVideo } from '@/components/background-video';
+import { CountdownTimer } from '@/components/countdown-timer';
 
 type Attachment = {
   id: string;
@@ -44,6 +45,9 @@ export default function Home() {
     <div className="min-h-screen bg-black text-white font-mono">
       {/* Background Videos */}
       <BackgroundVideo />
+
+      {/* Countdown Timer */}
+      <CountdownTimer />
 
       {/* Header - Brutalist style */}
       <header className="border-b-4 border-red-500 p-4 bg-black relative z-10">
