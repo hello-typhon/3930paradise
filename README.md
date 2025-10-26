@@ -28,6 +28,18 @@ An interactive web application for residents to document and share events at 393
 - **bcryptjs** - Password hashing
 - **Vercel** - Deployment platform
 
+## 🚀 Deployment
+
+**⚠️ GitHub Pages cannot host this app** (requires server-side features).
+
+**Recommended: Deploy to Vercel (FREE)**
+- Push your code to GitHub
+- Import to Vercel (https://vercel.com)
+- Add environment variables
+- Deploy in 5 minutes
+
+📖 **[Full Deployment Guide →](DEPLOYMENT.md)**
+
 ## Getting Started
 
 ### Prerequisites
